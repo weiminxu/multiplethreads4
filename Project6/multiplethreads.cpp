@@ -17,18 +17,20 @@
 std::mutex vectLock;
 std::vector<unsigned int> primeVect;
 
-void FindPrimes(unsigned int start,
-	unsigned int end) {
-
+void FindPrimes(unsigned int start,unsigned int end) 
+{
 	// Cycle through numbers while ignoring evens
-	for (unsigned int x = start; x <= end; x += 2) {
-
+	for (unsigned int x = start; x <= end; x += 2) 
+	{
 		// If a modulus is 0 we know it isn't prime
-		for (unsigned int y = 2; y < x; y++) {
-			if ((x % y) == 0) {
+		for (unsigned int y = 2; y < x; y++) 
+		{
+			if ((x % y) == 0) 
+			{
 				break;
 			}
-			else if ((y + 1) == x) {
+			else if ((y + 1) == x) 
+			{
 				vectLock.lock();
 				primeVect.push_back(x);
 				vectLock.unlock();
@@ -37,10 +39,8 @@ void FindPrimes(unsigned int start,
 	}
 }
 
-void FindPrimesWithThreads(unsigned int start,
-	unsigned int end,
-	unsigned int numThreads) {
-
+void FindPrimesWithThreads(unsigned int start,unsigned int end,unsigned int numThreads) 
+{
 	std::vector<std::thread> threadVect;
 
 	// Divide up the calculation so each thread
@@ -49,15 +49,16 @@ void FindPrimesWithThreads(unsigned int start,
 	unsigned int newEnd = start + threadSpread - 1;
 
 	// Create prime list for each thread
-	for (unsigned int x = 0; x < numThreads; x++) {
-		threadVect.emplace_back(FindPrimes,
-			start, newEnd);
+	for (unsigned int x = 0; x < numThreads; x++) 
+	{
+		threadVect.emplace_back(FindPrimes,start, newEnd);
 
 		start += threadSpread;
 		newEnd += threadSpread;
 	}
 
-	for (auto& t : threadVect) {
+	for (auto& t : threadVect) 
+	{
 		t.join();
 	}
 
@@ -78,7 +79,7 @@ int main()
 
 	// Print out the number of seconds
 	std::cout << "Execution Time : " <<
-		unsigned int (endTime - startTime) / double(CLOCKS_PER_SEC)
+		unsigned int (endTime-startTime)/double(CLOCKS_PER_SEC)
 		<< std::endl;
 
 	return 0;
